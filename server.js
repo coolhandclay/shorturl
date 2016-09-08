@@ -46,7 +46,7 @@ app.get('/*', function(req, res) {
        });
        db.close();
    });
-   res.redirect(redirect.toString());
+   res.redirect('http://google.com');
 });
 
 
