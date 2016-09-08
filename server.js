@@ -46,8 +46,7 @@ app.get('/*', function(req, res) {
        });
        db.close();
    });
-   res.redirect(redirect);
-   res.end();
+   res.redirect(redirect.toString());
 });
 
 
