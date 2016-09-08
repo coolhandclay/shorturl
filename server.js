@@ -39,7 +39,7 @@ app.get('/*', function(req, res) {
    mongo.connect(dburl, function(err, db) {
        if(err) throw err;
        var urls = db.collection('urls');
-       urls.find({_id: new ObjectId(hash)}).toArray(function(err, documents){
+       urls.find({_id: new ObjectId(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
            redirect = documents[0].url;
            console.log(redirect);
