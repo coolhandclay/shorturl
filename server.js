@@ -1,7 +1,7 @@
 var port = process.env.PORT || 8080;
 var mongo = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
-var dburl = 'mongodb://localhost:27017/shorturl';
+var dburl = process.env.MONGOLAB_URI;
 var express = require('express');
 var buildUrl = require('./helpers/buildUrl.js');
 var checkUrl = require('./helpers/checkUrl.js');
@@ -37,7 +37,7 @@ app.get('/*', function(req, res) {
     var redirect = '';
     var hash = req.params[0];
    mongo.connect(dburl, function(err, db) {
-       if(err) throw err;
+       if(err) console.log('unable to connect to mongodb server: ' + err);
        var urls = db.collection('urls');
        urls.find({_id: new ObjectId(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
