@@ -7,6 +7,7 @@ var buildUrl = require('./helpers/buildUrl.js');
 var checkUrl = require('./helpers/checkUrl.js');
 var app = express();
 
+
 //INSTRUCTIONS//
 app.get('/', function(req,res) {
    res.end('HELLO! Add a "/new/URL" to the end of the URL.'); 
@@ -46,7 +47,7 @@ app.get('/*', function(req, res) {
        });
        db.close();
    });
-   res.redirect('http://google.com');
+   res.redirect(redirect);
    res.end();
 });
 
