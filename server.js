@@ -34,6 +34,7 @@ app.get('/new/*', function(req, res) {
 
 //REDIRECT TO SHORT URL//
 app.get('/*', function(req, res) {
+    console.log('2nd get');
     var redirect = '';
     var hash = req.params[0];
    mongo.connect(dburl, function(err, db) {
@@ -45,7 +46,7 @@ app.get('/*', function(req, res) {
        //IT EITHER NEEDS TO FIND THE AUTOMATICALLY ASSIGNED OBJECT ID, OR WE NEED TO ASSIGN OUR OWN ID AND FIND THAT
        
        /////////////////////////
-       urls.find({_id: ObjectID(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
+       urls.find({_id: new ObjectID(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
            if(documents[0]) {
             redirect = documents[0].url;
