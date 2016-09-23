@@ -11,5 +11,8 @@
   "dependencies": {
     "express": "^4.14.0",
     "mongodb": "^2.2.9"
+  },
+  "devDependencies": {
+    "dotenv": "^2.0.0"
   }
 }
