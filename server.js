@@ -1,7 +1,7 @@
 var port = process.env.PORT || 8080;
 var mongo = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectID;
 var dburl = process.env.MONGOLAB_URI;
+var ObjectID = require('mongodb').ObjectID;
 var express = require('express');
 var buildUrl = require('./helpers/buildUrl.js');
 var checkUrl = require('./helpers/checkUrl.js');
@@ -24,7 +24,6 @@ app.get('/new/*', function(req, res) {
                 if(err) {console.error('insert didnt work')}
                 res.end('Added ' + data.ops[0].url.toString() + ' as ' + data.ops[0]._id.toString());
             });
-            
             db.close();
         });
         
@@ -40,9 +39,19 @@ app.get('/*', function(req, res) {
    mongo.connect(dburl, function(err, db) {
        if(err) console.log('unable to connect to mongodb server: ' + err);
        var urls = db.collection('urls');
-       urls.find({_id: new ObjectId(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
+       
+       /////////////////////////
+       
+       //IT EITHER NEEDS TO FIND THE AUTOMATICALLY ASSIGNED OBJECT ID, OR WE NEED TO ASSIGN OUR OWN ID AND FIND THAT
+       
+       /////////////////////////
+       urls.find({_id: ObjectID(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
-           redirect = documents[0].url;
+           if(documents[0]) {
+            redirect = documents[0].url;
+           } else {
+               redirect = 'not found';
+           }
            console.log(redirect);
        });
        db.close();
@@ -50,6 +59,4 @@ app.get('/*', function(req, res) {
    res.redirect(redirect);
    res.end();
 });
-
-
 app.listen(port);
