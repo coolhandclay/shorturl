@@ -29,7 +29,7 @@ app.get('/new/*', function(req, res) {
             }
             urls.insert({_id: getNextSequenceValue('urlid'), url: url}, function(err, data) {
                 if(err) {console.error('insert didnt work')}
-                res.end('Added ' + data.ops[0].url.toString() + ' as ' + data.ops[0]._id.toString());
+                res.end(JSON.stringify(data));
             });
             db.close();
         });
@@ -53,7 +53,7 @@ app.get('/*', function(req, res) {
        //IT EITHER NEEDS TO FIND THE AUTOMATICALLY ASSIGNED OBJECT ID, OR WE NEED TO ASSIGN OUR OWN ID AND FIND THAT
        
        /////////////////////////
-       urls.find({_id: mongo.ObjectID(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
+       urls.find({_id: hash}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
            if(documents[0]) {
             redirect = documents[0].url;
