@@ -1,7 +1,6 @@
 var port = process.env.PORT || 8080;
 var mongo = require('mongodb').MongoClient;
 var dburl = process.env.MONGOLAB_URI;
-var ObjectID = require('mongodb').ObjectID;
 var express = require('express');
 var buildUrl = require('./helpers/buildUrl.js');
 var checkUrl = require('./helpers/checkUrl.js');
@@ -19,8 +18,18 @@ app.get('/new/*', function(req, res) {
     if(checkUrl(url)) {
         mongo.connect(dburl, function(err, db) {
             if(err) {console.error('mongodb didnt connect')}
+            var counters = db.collection('counters');
             var urls = db.collection('urls');
-            urls.insert({url: url}, function(err, data) {
+            counters.insert({_id:"urlid",sequence_value:0});
+            function getNextSequenceValue(sequenceName){
+                var sequenceDocument = db.counters.findAndModify({
+                    query:{_id: sequenceName },
+                    update: {$inc:{sequence_value:1}},
+                    new:true
+                });
+                return sequenceDocument.sequence_value;
+            }
+            urls.insert({_id: getNextSequenceValue('urlid'), url: url}, function(err, data) {
                 if(err) {console.error('insert didnt work')}
                 res.end('Added ' + data.ops[0].url.toString() + ' as ' + data.ops[0]._id.toString());
             });
@@ -46,7 +55,7 @@ app.get('/*', function(req, res) {
        //IT EITHER NEEDS TO FIND THE AUTOMATICALLY ASSIGNED OBJECT ID, OR WE NEED TO ASSIGN OUR OWN ID AND FIND THAT
        
        /////////////////////////
-       urls.find({_id: ObjectID(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
+       urls.find({_id: hash}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
            if(documents[0]) {
             redirect = documents[0].url;

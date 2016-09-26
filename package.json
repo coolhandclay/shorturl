@@ -10,13 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
-    "mongodb": "^2.2.9"
+    "mongodb": "^2.2.10"
   },
   "devDependencies": {
     "dotenv": "^2.0.0"
   },
   "engines": {
-    "node" : "4.5.0",
-    "npm" : "2.15.9"
+    "node": "4.5.0",
+    "npm": "2.15.9"
   }
 }
