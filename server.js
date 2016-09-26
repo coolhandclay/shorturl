@@ -20,7 +20,7 @@ app.get('/new/*', function(req, res) {
             if(err) {console.error('mongodb didnt connect')}
             var urls = db.collection('urls');
             function getNextSequenceValue(sequenceName){
-                var sequenceDocument = db.counters.findAndModify({
+                var sequenceDocument = db.collection('counters').findAndModify({
                     query:{_id: sequenceName },
                     update: {$inc:{sequence_value:1}},
                     new:true
