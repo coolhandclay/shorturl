@@ -18,9 +18,7 @@ app.get('/new/*', function(req, res) {
     if(checkUrl(url)) {
         mongo.connect(dburl, function(err, db) {
             if(err) {console.error('mongodb didnt connect')}
-            var counters = db.collection('counters');
             var urls = db.collection('urls');
-            counters.insert({_id:"urlid",sequence_value:0});
             function getNextSequenceValue(sequenceName){
                 var sequenceDocument = db.counters.findAndModify({
                     query:{_id: sequenceName },
