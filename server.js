@@ -21,7 +21,7 @@ app.get('/new/*', function(req, res) {
             var urls = db.collection('urls');
             function getNextSequenceValue(sequenceName){
                 var sequenceDocument = db.collection('counters').findAndModify({
-                    query:{_id: sequenceName },
+                    query:{_id: 'urlid' },
                     update: {$inc:{sequence_value:1}},
                     new:true
                 });
@@ -43,7 +43,7 @@ app.get('/new/*', function(req, res) {
 app.get('/*', function(req, res) {
     console.log('2nd get');
     var redirect = '';
-    var hash = req.params[0].toString();
+    var hash = req.params[0];
    mongo.connect(dburl, function(err, db) {
        if(err) console.log('unable to connect to mongodb server: ' + err);
        var urls = db.collection('urls');
