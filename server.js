@@ -40,7 +40,6 @@ app.get('/new/*', function(req, res) {
 
 //REDIRECT TO SHORT URL//
 app.get('/*', function(req, res) {
-    console.log('2nd get');
     var redirect = '';
     var hash = req.params[0];
     console.log(hash);
@@ -55,12 +54,20 @@ app.get('/*', function(req, res) {
        /////////////////////////
        urls.find({_id:parseInt(hash)}).toArray(function(err, documents){ // this is where you'd want to hash the id to make it shorter
            if(err) throw err;
-           console.log(documents[0].url);
-           redirect = documents[0].url;
+           if(documents[0]) {
+                console.log(documents[0].url);
+                redirect = documents[0].url;
+                db.close();
+                res.redirect(redirect);
+                res.end();
+           } else {
+               console.log('not found');
+               db.close();
+               res.end();
+           }
        });
-       db.close();
+       
    });
-   res.redirect(redirect);
-   res.end();
+   
 });
 app.listen(port);
